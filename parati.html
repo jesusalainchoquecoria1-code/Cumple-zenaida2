@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Zenaida 🌷</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(135deg,#ffd6e7,#ffe4f2,#fff0f7);
+}
+
+/* Carta */
+.carta{
+    width:92%;
+    max-width:450px;
+    height:85vh;
+    background:rgba(255,255,255,0.45);
+    backdrop-filter:blur(15px);
+    border-radius:30px;
+    padding:25px;
+    overflow-y:auto;
+    box-shadow:0 10px 30px rgba(0,0,0,0.12);
+    z-index:10;
+    border:1px solid rgba(255,255,255,0.4);
+}
+
+.carta::-webkit-scrollbar{
+    display:none;
+}
+
+h1{
+    text-align:center;
+    color:#d63384;
+    font-family:'Dancing Script',cursive;
+    font-size:3rem;
+    margin-bottom:20px;
+}
+
+p{
+    color:#444;
+    font-size:1rem;
+    line-height:1.8;
+    margin-bottom:16px;
+}
+
+.mensaje{
+    text-align:center;
+    color:#d63384;
+    font-weight:600;
+}
+
+.firma{
+    text-align:center;
+    margin-top:25px;
+    color:#d63384;
+    font-family:'Dancing Script',cursive;
+    font-size:2rem;
+}
+
+/* Tulipanes */
+.tulipan{
+    position:absolute;
+    top:-50px;
+    font-size:30px;
+    animation:caer linear forwards;
+    pointer-events:none;
+    opacity:.9;
+}
+
+@keyframes caer{
+    0%{
+        transform:translateY(-50px) rotate(0deg);
+    }
+    100%{
+        transform:translateY(110vh) rotate(360deg);
+    }
+}
+
+/* Botón música */
+.btn{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    padding:12px 24px;
+    border:none;
+    border-radius:50px;
+    background:#d63384;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    z-index:100;
+    box-shadow:0 5px 20px rgba(214,51,132,.4);
+}
+</style>
+</head>
+<body>
+
+<audio id="musica" loop>
+    <source src="cancion.mp3" type="audio/mpeg">
+</audio>
+
+<button class="btn" onclick="musica()">
+🎵 Reproducir Música
+</button>
+
+<div class="carta">
+    <h1>🌷 Feliz Cumpleaños Zenaida 🌷</h1>
+
+    <p>
+        Hoy es un día muy especial porque nació una persona que significa muchísimo para mí.
+    </p>
+
+    <p>
+        Quiero que sepas que eres alguien muy importante en mi vida. Tu sonrisa, tu forma de ser y cada momento compartido han logrado ocupar un lugar muy bonito en mi corazón.
+    </p>
+
+    <p>
+        Hay personas que simplemente pasan por nuestra vida, pero también existen personas que dejan una huella especial. Tú eres una de ellas.
+    </p>
+
+    <p>
+        Deseo de todo corazón que este nuevo año de vida esté lleno de felicidad, sueños cumplidos, momentos inolvidables y muchas razones para sonreír.
+    </p>
+
+    <p>
+        Gracias por existir, por ser tan especial y por hacer que los días sean más bonitos con tu presencia.
+    </p>
+
+    <p class="mensaje">
+        ✨ Te quiero muchísimo y siempre tendrás un lugar muy especial en mi corazón. ✨
+    </p>
+
+    <p class="mensaje">
+        🌷 Feliz Cumpleaños, Zenaida 🌷
+    </p>
+
+    <div class="firma">
+        Con mucho cariño ❤️<br>
+        Jesús Alain
+    </div>
+</div>
+
+<script>
+function crearTulipan(){
+    const tulipan=document.createElement("div");
+    tulipan.classList.add("tulipan");
+    tulipan.innerHTML="🌷";
+
+    tulipan.style.left=Math.random()*100+"vw";
+    tulipan.style.animationDuration=(8+Math.random()*5)+"s";
+
+    document.body.appendChild(tulipan);
+
+    setTimeout(()=>{
+        tulipan.remove();
+    },13000);
+}
+
+setInterval(crearTulipan,300);
+
+let reproduciendo=false;
+
+function musica(){
+    const audio=document.getElementById("musica");
+
+    if(reproduciendo){
+        audio.pause();
+    }else{
+        audio.play();
+    }
+
+    reproduciendo=!reproduciendo;
+}
+</script>
+
+</body>
+</html>

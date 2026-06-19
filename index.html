@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti - Corazón de Tulipanes</title>
+    <style>
+        /* Estilos Generales y Fondo */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #050510;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Contenedor central para asegurar que los botones estén en el medio exacto */
+        #contenedor-central {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 60; /* El nivel más alto para que el botón NUNCA se tape */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Primer botón: Activa la animación */
+        #btn-para-ti {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            color: white;
+            background: linear-gradient(45deg, #f472b6, #db2777);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(244, 114, 182, 0.6);
+            transition: transform 0.3s, box-shadow 0.3s, opacity 0.5s;
+        }
+
+        #btn-para-ti:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 35px rgba(244, 114, 182, 0.9);
+        }
+
+        /* Segundo botón: Lleva a la carta */
+        #btn-carta {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            color: white;
+            background: rgba(219, 39, 119, 0.5);
+            border: 2px solid #db2777;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 0 20px rgba(219, 39, 119, 0.6);
+            
+            /* Oculto por defecto */
+            display: none; 
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 1s, transform 1s, background 0.3s;
+        }
+
+        #btn-carta:hover {
+            background: rgba(219, 39, 119, 0.9);
+            transform: scale(1.05) !important;
+            box-shadow: 0 0 30px rgba(244, 114, 182, 0.8);
+        }
+
+        /* Texto de Dedicatoria - CORREGIDO */
+        #texto-dedicatoria {
+            position: absolute;
+            top: 8%;
+            color: #fbcfe8;
+            font-size: 2.3rem;
+            text-align: center;
+            z-index: 50; /* Ahora está por encima de las flores (que tienen 6) */
+            pointer-events: none; /* Para que no bloquee clics accidentales al botón */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 2s 1s ease-out, transform 2s 1s ease-out;
+            /* Le añadí un sombreado oscuro de fondo para que resalte incluso si una flor pasa detrás */
+            text-shadow: 0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(219, 39, 119, 0.9);
+            width: 100%;
+            letter-spacing: 3px;
+        }
+
+        /* Contenedor del Ramo */
+        #ramo-container {
+            position: absolute;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 5; /* Z-index bajo para que se quede de fondo */
+            pointer-events: none; /* Evita que las flores bloqueen el botón */
+        }
+
+        /* Brillo en la base de los tallos */
+        #brillo-base {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 60px;
+            background: radial-gradient(ellipse at center, rgba(219, 39, 119, 0.8) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            z-index: 4;
+            opacity: 0;
+            transition: opacity 3s 3.5s;
+        }
+
+        /* Estilos de los Tulipanes */
+        .tallo {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: linear-gradient(to top, #064e3b, #16a34a);
+            border-radius: 3px;
+            height: 0;
+            transform-origin: bottom center;
+            transition: height 3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 6;
+        }
+
+        @keyframes viento {
+            0%, 100% { transform: rotate(var(--angulo-inicial)); }
+            50% { transform: rotate(calc(var(--angulo-inicial) + 1.5deg)); }
+        }
+
+        .balanceo-activo {
+            animation: viento 4s ease-in-out infinite;
+        }
+
+        .hoja {
+            position: absolute;
+            width: 15px;
+            height: 35px;
+            background: #14532d;
+            border-radius: 0 100% 0 100%;
+            opacity: 0;
+            transition: opacity 1s 2.5s;
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        .hoja.izquierda {
+            transform: rotate(-40deg);
+            left: -10px;
+        }
+        .hoja.derecha {
+            transform: rotate(40deg) scaleX(-1);
+            right: -10px;
+        }
+
+        .flor {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            width: 32px;
+            height: 40px;
+            background: linear-gradient(to bottom, #f9a8d4, #db2777);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: 0 0 15px rgba(244, 114, 182, 0.6);
+            transition: transform 1.5s 3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .flor::before, .flor::after {
+            content: '';
+            position: absolute;
+            background: linear-gradient(to bottom, #fbcfe8, #be185d);
+            width: 20px;
+            height: 35px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        }
+        .flor::before { left: -3px; transform: rotate(-15deg); }
+        .flor::after { right: -3px; transform: rotate(15deg); }
+    </style>
+</head>
+<body>
+
+    <audio id="miMusica" src="cancion.mp3" preload="auto"></audio>
+    <canvas id="canvas"></canvas>
+
+    <div id="contenedor-central">
+        <button id="btn-para-ti" onclick="iniciarAnimacion()">Para ti</button>
+        <a href="carta.html" id="btn-carta">Toca aqui</a>
+    </div>
+
+    <div id="texto-dedicatoria">Para ti... mi corazón ✨</div>
+
+    <div id="ramo-container">
+        <div id="brillo-base"></div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let estrellas = [];
+        let estrellasFugaces = [];
+
+        function ajustarPantalla() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', ajustarPantalla);
+        ajustarPantalla();
+
+        for(let i = 0; i < 150; i++) {
+            estrellas.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 1.2 + 0.3,
+                opacity: Math.random(),
+                velocidadParpadeo: (Math.random() - 0.5) * 0.01
+            });
+        }
+
+        function crearEstrellaFugace() {
+            if(estrellasFugaces.length < 3) {
+                estrellasFugaces.push({
+                    x: Math.random() * (canvas.width * 0.8),
+                    y: Math.random() * (canvas.height / 2),
+                    length: Math.random() * 80 + 40,
+                    speed: Math.random() * 4 + 3,
+                    opacity: 1
+                });
+            }
+        }
+
+        function animarCielo() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            estrellas.forEach(e => {
+                ctx.fillStyle = `rgba(255, 255, 255, ${e.opacity})`;
+                ctx.beginPath();
+                ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
+                ctx.fill();
+                e.opacity += e.velocidadParpadeo;
+                if(e.opacity < 0.1 || e.opacity > 1) e.velocidadParpadeo *= -1;
+            });
+
+            estrellasFugaces.forEach((ef, index) => {
+                ctx.strokeStyle = `rgba(255, 255, 255, ${ef.opacity})`;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(ef.x, ef.y);
+                ctx.lineTo(ef.x - ef.length, ef.y + ef.length * 0.5);
+                ctx.stroke();
+                ef.x += ef.speed;
+                ef.y -= ef.speed * 0.5;
+                ef.opacity -= 0.01;
+                if (ef.opacity <= 0 || ef.x > canvas.width || ef.y < 0) {
+                    estrellasFugaces.splice(index, 1);
+                }
+            });
+            requestAnimationFrame(animarCielo);
+        }
+        animarCielo();
+
+        function iniciarAnimacion() {
+            const musica = document.getElementById('miMusica');
+            musica.play().catch(e => console.log(e));
+
+            // 1. Ocultar primer botón
+            const btn1 = document.getElementById('btn-para-ti');
+            btn1.style.opacity = '0';
+            btn1.style.transform = 'scale(0.8)';
+            setTimeout(() => { btn1.style.display = 'none'; }, 500);
+
+            // 2. Mostrar texto de dedicatoria
+            const texto = document.getElementById('texto-dedicatoria');
+            texto.style.opacity = '1';
+            texto.style.transform = 'translateY(0)';
+
+            setInterval(crearEstrellaFugace, 1500);
+            document.getElementById('brillo-base').style.opacity = '1';
+
+            // 3. GENERACIÓN DEL CORAZÓN (Fórmulas Corregidas para la web)
+            const ramo = document.getElementById('ramo-container');
+            const numTulipanes = 32; // Unos cuantos más para definir mejor la forma
+            
+            // Tamaño y posición adaptada a la pantalla para que no choque arriba
+            const escala = Math.min(window.innerWidth, window.innerHeight) * 0.020; 
+            const centroY = window.innerHeight * 0.45; // Centro del corazón más centrado
+            const origenY = window.innerHeight; // La base del suelo
+
+            for (let i = 0; i < numTulipanes; i++) {
+                const t = -Math.PI + (i * (2 * Math.PI / numTulipanes));
+                
+                // Fórmula del corazón
+                const mathX = 16 * Math.pow(Math.sin(t), 3);
+                const mathY = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+                
+                // En el navegador el eje Y va al revés (0 es arriba, 1000 es abajo). 
+                // Por eso restamos el Y en vez de sumarlo.
+                const florX = mathX * escala; 
+                const florY = centroY - (mathY * escala); 
+
+                // Distancias para crear el tallo desde el suelo hasta la flor
+                const dx = florX; 
+                const dy = origenY - florY; 
+
+                // Teorema de Pitágoras para la altura exacta del tallo
+                const alturaTallo = Math.sqrt(dx * dx + dy * dy);
+                // Calcular la inclinación exacta del tallo
+                const anguloRad = Math.atan2(dx, dy);
+                const anguloDeg = anguloRad * (180 / Math.PI);
+
+                setTimeout(() => {
+                    const tallo = document.createElement('div');
+                    tallo.className = 'tallo';
+                    tallo.style.setProperty('--angulo-inicial', `${anguloDeg}deg`);
+                    tallo.style.transform = `rotate(${anguloDeg}deg)`;
+                    tallo.style.animationDelay = `${Math.random() * 2}s`;
+
+                    const flor = document.createElement('div');
+                    flor.className = 'flor';
+
+                    const hojaIzq = document.createElement('div');
+                    hojaIzq.className = 'hoja izquierda';
+                    hojaIzq.style.bottom = `${alturaTallo * 0.3}px`;
+
+                    const hojaDer = document.createElement('div');
+                    hojaDer.className = 'hoja derecha';
+                    hojaDer.style.bottom = `${alturaTallo * 0.55}px`;
+
+                    tallo.appendChild(flor);
+                    tallo.appendChild(hojaIzq);
+                    tallo.appendChild(hojaDer);
+                    ramo.appendChild(tallo);
+
+                    setTimeout(() => {
+                        tallo.style.height = `${alturaTallo}px`;
+                        flor.style.transform = 'translateX(-50%) scale(1)';
+                        hojaIzq.style.opacity = '1';
+                        hojaDer.style.opacity = '1';
+                        
+                        setTimeout(() => {
+                            tallo.classList.add('balanceo-activo');
+                        }, 3000);
+                    }, 50);
+
+                }, i * 150); 
+            }
+
+            // 4. MOSTRAR EL SEGUNDO BOTÓN EN EL CENTRO
+            setTimeout(() => {
+                const btnCarta = document.getElementById('btn-carta');
+                btnCarta.style.display = 'inline-block';
+                
+                setTimeout(() => {
+                    btnCarta.style.opacity = '1';
+                    btnCarta.style.transform = 'scale(1)';
+                }, 50);
+            }, 7500);
+        }
+    </script>
+</body>
+</html>

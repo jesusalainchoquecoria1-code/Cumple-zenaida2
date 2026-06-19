@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tulipanes Animados</title>
+    <style>
+        /* Configuración global del fondo */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #1a2a6c, #b21f1f, #fdbb2d);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            overflow: hidden;
+        }
+
+        /* Contenedor del jardín de tulipanes */
+        .jardin {
+            display: flex;
+            gap: 60px;
+            margin-bottom: 50px;
+        }
+
+        /* Estructura base de cada tulipán */
+        .tulipan {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            transform-origin: bottom center;
+            animation: balanceo 4s ease-in-out infinite alternate;
+        }
+
+        /* Variaciones de velocidad en la animación para naturalidad */
+        .tulipan:nth-child(2) {
+            animation-delay: -1.5s;
+            animation-duration: 3.5s;
+        }
+        .tulipan:nth-child(3) {
+            animation-delay: -0.7s;
+            animation-duration: 4.2s;
+        }
+
+        /* Capullo principal de la flor */
+        .flor {
+            position: relative;
+            width: 80px;
+            height: 90px;
+            z-index: 2;
+        }
+
+        /* Pétalos generados con bordes redondeados */
+        .petalo {
+            position: absolute;
+            bottom: 0;
+            height: 100%;
+            border-radius: 50px 50px 10px 10px;
+        }
+
+        .petalo-izq {
+            width: 55px;
+            left: 0;
+            transform: rotate(-10deg);
+            z-index: 2;
+        }
+
+        .petalo-der {
+            width: 55px;
+            right: 0;
+            transform: rotate(10deg);
+            z-index: 2;
+        }
+
+        .petalo-centro {
+            width: 50px;
+            left: 15px;
+            height: 95%;
+            z-index: 1;
+            filter: brightness(0.85); /* Tono más oscuro para dar profundidad */
+        }
+
+        /* Paleta de colores individuales para cada tulipán */
+        .rosa .petalo { background-color: #ff5e62; }
+        .amarillo .petalo { background-color: #ffb347; }
+        .morado .petalo { background-color: #7f00ff; }
+
+        /* Tallo de la flor */
+        .tallo {
+            width: 8px;
+            height: 180px;
+            background-color: #4ecdc4;
+            border-radius: 4px;
+            margin-top: -5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hojas unidas al tallo */
+        .hoja {
+            position: absolute;
+            width: 30px;
+            height: 70px;
+            background-color: #45b6ae;
+            border-radius: 0 100px 0 100px;
+        }
+
+        .hoja-izq {
+            left: -25px;
+            top: 50px;
+            transform: rotate(-30deg);
+        }
+
+        .hoja-der {
+            right: -25px;
+            top: 80px;
+            transform: rotate(30deg) scaleX(-1); /* Invierte la orientación de la hoja */
+        }
+
+        /* Animación de movimiento/balanceo */
+        @keyframes balanceo {
+            0% {
+                transform: rotate(-3deg);
+            }
+            100% {
+                transform: rotate(4deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="jardin">
+        <!-- Tulipán Rosa -->
+        <div class="tulipan rosa">
+            <div class="flor">
+                <div class="petalo petalo-izq"></div>
+                <div class="petalo petalo-centro"></div>
+                <div class="petalo petalo-der"></div>
+            </div>
+            <div class="tallo">
+                <div class="hoja hoja-izq"></div>
+                <div class="hoja hoja-der"></div>
+            </div>
+        </div>
+
+        <!-- Tulipán Amarillo -->
+        <div class="tulipan amarillo">
+            <div class="flor">
+                <div class="petalo petalo-izq"></div>
+                <div class="petalo petalo-centro"></div>
+                <div class="petalo petalo-der"></div>
+            </div>
+            <div class="tallo">
+                <div class="hoja hoja-izq"></div>
+            </div>
+        </div>
+
+        <!-- Tulipán Morado -->
+        <div class="tulipan morado">
+            <div class="flor">
+                <div class="petalo petalo-izq"></div>
+                <div class="petalo petalo-centro"></div>
+                <div class="petalo petalo-der"></div>
+            </div>
+            <div class="tallo">
+                <div class="hoja hoja-izq"></div>
+                <div class="hoja hoja-der"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

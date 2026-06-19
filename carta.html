@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feliz Cumpleaños Zenaida 🌷</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+overflow:hidden;
+background:#050510;
+height:100vh;
+color:white;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:0;
+}
+
+.pantalla{
+position:absolute;
+width:100%;
+height:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+transition:1s;
+z-index:5;
+}
+
+.oculta{
+opacity:0;
+pointer-events:none;
+}
+
+#pantalla1{
+background:transparent;
+}
+
+.titulo{
+font-size:2.2rem;
+margin-bottom:30px;
+text-shadow:0 0 20px #ff4d88;
+text-align:center;
+}
+
+.galeria{
+display:flex;
+gap:30px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.foto{
+width:220px;
+height:280px;
+border-radius:25px;
+overflow:hidden;
+border:4px solid #ff7aa2;
+box-shadow:0 0 30px rgba(255,100,150,.8);
+animation:flotar 4s ease-in-out infinite;
+background:white;
+}
+
+.foto img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+@keyframes flotar{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-15px);}
+}
+
+.boton{
+margin-top:40px;
+padding:15px 35px;
+border:none;
+border-radius:50px;
+font-size:1.2rem;
+cursor:pointer;
+background:linear-gradient(45deg,#ff4d88,#ff7aa2);
+color:white;
+box-shadow:0 0 20px rgba(255,100,150,.7);
+}
+
+#pantalla2{
+background:rgba(0,0,0,.25);
+}
+
+.mensaje{
+font-size:3rem;
+text-align:center;
+color:#ffd6e4;
+text-shadow:0 0 25px #ff4d88;
+margin-bottom:30px;
+}
+
+.ramo{
+position:relative;
+width:350px;
+height:450px;
+}
+
+.tallo{
+position:absolute;
+bottom:0;
+width:5px;
+background:linear-gradient(#16a34a,#064e3b);
+border-radius:10px;
+transform-origin:bottom;
+}
+
+.flor{
+position:absolute;
+top:-35px;
+left:50%;
+transform:translateX(-50%);
+width:35px;
+height:45px;
+background:linear-gradient(#ffb3c7,#e11d48);
+border-radius:50%;
+box-shadow:0 0 20px #ff6b9a;
+}
+
+#btnCarta{
+position:absolute;
+bottom:40px;
+display:none;
+}
+
+#pantalla3{
+background:rgba(0,0,0,.85);
+backdrop-filter:blur(10px);
+}
+
+.carta{
+width:85%;
+max-width:700px;
+background:#fffdf4;
+padding:50px;
+border-radius:20px;
+border:8px double #d81b60;
+color:#333;
+text-align:center;
+box-shadow:0 0 50px rgba(255,255,255,.2);
+animation:aparecer .8s ease;
+}
+
+@keyframes aparecer{
+from{
+transform:scale(.7);
+opacity:0;
+}
+to{
+transform:scale(1);
+opacity:1;
+}
+}
+
+.carta h1{
+color:#b0004f;
+margin-bottom:20px;
+font-family:Georgia,serif;
+}
+
+.carta p{
+font-size:1.3rem;
+line-height:1.9;
+font-family:Georgia,serif;
+font-style:italic;
+}
+
+.petalo{
+position:absolute;
+top:-30px;
+font-size:20px;
+pointer-events:none;
+animation:caer linear forwards;
+}
+
+@keyframes caer{
+to{
+transform:translateY(110vh) rotate(360deg);
+opacity:0;
+}
+}
+
+.corazon{
+position:absolute;
+bottom:-30px;
+color:#ff4d88;
+font-size:22px;
+animation:subir 6s linear forwards;
+}
+
+@keyframes subir{
+to{
+transform:translateY(-120vh);
+opacity:0;
+}
+}
+.video-container{
+    margin-top:20px;
+    margin-bottom:20px;
+    display:flex;
+    justify-content:center;
+}
+
+.video-container video{
+    width:320px;
+    max-width:90%;
+    border-radius:20px;
+    border:3px solid #ff7aa2;
+    box-shadow:0 0 30px rgba(255,105,180,.8);
+}
+
+</style>
+</head>
+
+<body>
+
+<audio id="musica" loop>
+<source src="cancion.mp3" type="audio/mpeg">
+</audio>
+
+<canvas id="canvas"></canvas>
+
+<div class="pantalla" id="pantalla1">
+
+<div class="titulo">
+🌷 Para una persona muy especial 🌷
+</div>
+
+<div class="galeria">
+
+<div class="foto">
+<img src="foto1.png">
+</div>
+<div class="video-container">
+    <video autoplay muted loop controls>
+        <source src="video.mp4" type="video/mp4">
+    </video>
+</div>
+<div class="foto">
+<img src="foto2.png">
+</div>
+
+</div>
+
+<button class="boton" onclick="window.location.href='parati.html'">
+Siguiente ➜
+</button>
+
+</div>
+
+<div class="pantalla oculta" id="pantalla2">
+
+<div class="mensaje">
+🌷 Feliz Cumpleaños Zenaida 🌷
+</div>
+
+<div class="ramo" id="ramo"></div>
+
+<button class="boton" id="btnCarta" onclick="abrirCarta()">
+Leer Carta 💌
+</button>
+
+</div>
+
+<div class="pantalla oculta" id="pantalla3">
+
+<div class="carta">
+
+<h1>Para ti ❤️</h1>
+
+<p>
+Feliz cumpleaños, Zenaida.<br><br>
+
+Hoy quiero desearte un día lleno de alegría,
+sonrisas y momentos hermosos.
+Eres una persona muy especial y mereces que
+cada instante de este día esté lleno de felicidad.<br><br>
+
+Gracias por ser alguien tan única y especial.
+Que todos tus sueños se acerquen un poco más
+a cumplirse y que nunca te falten motivos
+para sonreír.<br><br>
+
+Con cariño,<br>
+Jesús ❤️
+</p>
+
+<br>
+
+<button class="boton" onclick="cerrarCarta()">
+Cerrar
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
+
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+let estrellas=[];
+
+for(let i=0;i<200;i++){
+estrellas.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2
+});
+}
+
+function animar(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+estrellas.forEach(e=>{
+ctx.fillStyle="white";
+ctx.beginPath();
+ctx.arc(e.x,e.y,e.r,0,Math.PI*2);
+ctx.fill();
+});
+
+requestAnimationFrame(animar);
+}
+
+animar();
+
+function crearPetalo(){
+const p=document.createElement("div");
+p.className="petalo";
+p.innerHTML="🌷";
+
+p.style.left=Math.random()*100+"vw";
+p.style.animationDuration=(5+Math.random()*5)+"s";
+
+document.body.appendChild(p);
+
+setTimeout(()=>{
+p.remove();
+},10000);
+}
+
+setInterval(crearPetalo,300);
+
+function irPantalla2(){
+
+document.getElementById("musica").play();
+
+document.getElementById("pantalla1").classList.add("oculta");
+document.getElementById("pantalla2").classList.remove("oculta");
+
+const ramo=document.getElementById("ramo");
+
+const datos=[
